@@ -1,0 +1,45 @@
+name: Weekly Fruit Soda batch
+on:
+  schedule:
+    - cron: '30 4 * * 0'   # Sundays 10:00 AM IST
+  workflow_dispatch:
+    inputs:
+      count:
+        description: 'How many new videos to plan'
+        default: '6'
+permissions:
+  contents: write
+jobs:
+  batch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: sudo apt-get update -y && sudo apt-get install -y ffmpeg
+      - run: pip install -r requirements.txt
+      - name: Fonts
+        run: |
+          mkdir -p fonts && curl -sL https://github.com/google/fonts/raw/main/ofl/poppins/Poppins-Bold.ttf -o fonts/Poppins-Bold.ttf
+          curl -sL https://github.com/google/fonts/raw/main/ofl/poppins/Poppins-Regular.ttf -o fonts/Poppins-Regular.ttf
+      - name: Plan new specs if queue is short
+        env: { ANTHROPIC_API_KEY: '${{ secrets.ANTHROPIC_API_KEY }}' }
+        run: |
+          mkdir -p specs done
+          N=$(ls specs/*.json 2>/dev/null | wc -l); WANT=${{ github.event.inputs.count || '6' }}
+          if [ "$N" -lt "$WANT" ]; then python fruitsoda.py plan $((WANT-N)); fi
+      - name: Render
+        env: { FS_FONTS: '${{ github.workspace }}/fonts/' }
+        run: python fruitsoda.py render
+      - name: Publish release + manifest
+        env: { GH_TOKEN: '${{ github.token }}' }
+        run: |
+          TAG=batch-$(date -u +%Y%m%d-%H%M)
+          NEXTMON=$(date -u -d 'next monday' +%F)
+          python fruitsoda.py manifest $TAG $NEXTMON
+          gh release create $TAG out/*.mp4 out/*.jpg out/manifest.json --title "$TAG" --notes "Fruit Soda batch"
+          git mv specs/*.json done/
+          cp out/manifest.json latest.json
+          git config user.name fruitsoda-bot && git config user.email bot@users.noreply.github.com
+          git add -A done specs latest.json && git commit -m "Batch $TAG" && git push
