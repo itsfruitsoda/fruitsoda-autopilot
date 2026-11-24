@@ -159,6 +159,7 @@ def caption(c, words, times, t, y0):
             c.text(w, (x, y), 70, YEL if (act and idx == max(act)) else WHITE, anchor='lm', stroke=9, sc=DARK)
             x += fnt.getlength(w+' '); idx += 1
 
+_yy,_xx=np.mgrid[0:H,0:W]; VIG=(1-0.30*np.clip((((_xx-W/2)/(W/2))**2+((_yy-H/2)/(H/2))**2)-0.35,0,1))[...,None].astype(np.float32)
 def build(spec, tm):
     lines = tm['lines']; total = tm['total']+0.4; n = len(lines)
     pal = spec.get('bg') or PALETTES[int(hashlib.md5(spec['id'].encode()).hexdigest(), 16) % len(PALETTES)]
@@ -173,6 +174,10 @@ def build(spec, tm):
         for x, off, sp, r in bub:
             cv2.circle(o, (int(x+14*math.sin(t*1.3+off)), int(H+60-((t*sp+off) % (H+120)))), int(r), (255,255,255), 3, cv2.LINE_AA)
         c.img = cv2.addWeighted(o, .22, c.img, .78, 0)
+        ray = np.zeros((H//4, W//4), np.uint8)
+        for k in range(5):
+            a = t*0.15 + k*1.26; cv2.fillConvexPoly(ray, np.array([[135,-50],[135+int(650*math.cos(a)),-50+int(650*math.sin(a))],[135+int(650*math.cos(a+.16)),-50+int(650*math.sin(a+.16))]]), 255)
+        ray = cv2.resize(cv2.GaussianBlur(ray, (0,0), 10), (W,H)); c.img = cv2.add(c.img, (np.dstack([ray]*3)*0.10).astype(np.uint8))
         i = 0
         for k, L in enumerate(lines):
             if t >= L['start']-0.05: i = k
@@ -188,7 +193,12 @@ def build(spec, tm):
             if r > 10: paste_badge(c.img, 540, 780, r)
             c.text('@itsfruitsoda', (540,1085), 64, WHITE, stroke=6, sc=DARK); c.rrect(290,1150,790,1260,55,PINK); c.text('FOLLOW', (540,1205), 60, WHITE)
         if t >= lines[0]['start']-0.05: caption(c, *wt[i], t, 1560 if last else 1470)
-        return c.done()
+        out = c.done()
+        out = out.copy(); cv2.rectangle(out, (0,0), (int(W*clamp(t/total)),12), (255,214,64), -1)
+        dt = t-L['start']
+        if 0 <= dt < 0.28 and i > 0:
+            z = 1+0.045*(1-dt/0.28)**2; M = cv2.getRotationMatrix2D((W/2,H/2), 0, z); out = cv2.warpAffine(out, M, (W,H), borderMode=cv2.BORDER_REFLECT)
+        return (out*VIG).astype(np.uint8)
     return frame, total
 
 def render(path):
@@ -229,7 +239,7 @@ def manifest(tag, start):
     base = f"https://github.com/{os.environ['GITHUB_REPOSITORY']}/releases/download/{tag}/"; d0 = datetime.date.fromisoformat(start); items = []; k = 0
     for p in sorted(glob.glob(os.path.join(HERE, 'specs', '*.json'))):
         sp = json.load(open(p)); day = d0 + datetime.timedelta(days=k + (k // 6))   # Mon-Sat, skip Sunday
-        items.append(dict(id=sp['id'], date=str(day), title=sp.get('yt_title', sp['hook']), description=sp.get('desc', ''), caption=sp.get('caption', ''), tags=sp.get('tags', ''),
+        items.append(dict(id=sp['id'], date=str(day), title=sp.get('yt_title', sp['hook']), description=sp.get('desc', ''), caption=sp.get('caption', ''), tags=sp.get('tags', ''), audience=sp.get('audience', 'global'), country=sp.get('country', ''),
                           video=base + f"fruit_soda_{sp['id']}.mp4", thumb=base + f"fruit_soda_{sp['id']}_thumb.jpg")); k += 1
     json.dump(dict(tag=tag, items=items), open(os.path.join(OUT, 'manifest.json'), 'w'), indent=1); print(len(items), 'items')
 
