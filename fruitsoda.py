@@ -160,18 +160,30 @@ def caption(c, words, times, t, y0):
             x += fnt.getlength(w+' '); idx += 1
 
 def stock(query, path):
-    """Download one portrait stock clip (Pexels, free licence) for a search term; None if no key or no result."""
+    """Download one stock clip (Pixabay, free licence) for a search term; Pexels as backup. None if no key or no result."""
+    if not query: return None
+    import urllib.parse
+    q = urllib.parse.quote(query)
+    pk = os.environ.get('PIXABAY_API_KEY')
+    if pk:
+        try:
+            rq = urllib.request.Request('https://pixabay.com/api/videos/?safesearch=true&per_page=10&key=' + pk + '&q=' + q, headers={'User-Agent': 'fruitsoda'})
+            for v in json.load(urllib.request.urlopen(rq, timeout=30)).get('hits', []):
+                if not 4 <= v.get('duration', 0) <= 40: continue
+                f = v['videos'].get('medium') or v['videos'].get('small')
+                if not f or not f.get('url'): continue
+                urllib.request.urlretrieve(f['url'], path); return path
+        except Exception as e: print('pixabay failed', query, e)
     key = os.environ.get('PEXELS_API_KEY')
-    if not key or not query: return None
-    try:
-        import urllib.parse
-        rq = urllib.request.Request('https://api.pexels.com/videos/search?per_page=8&orientation=portrait&size=medium&query=' + urllib.parse.quote(query), headers={'Authorization': key, 'User-Agent': 'fruitsoda'})
-        for v in json.load(urllib.request.urlopen(rq, timeout=30)).get('videos', []):
-            if not 4 <= v.get('duration', 0) <= 40: continue
-            fs = [f for f in v['video_files'] if f.get('file_type') == 'video/mp4' and (f.get('height') or 0) >= 960 and (f.get('width') or 0) >= 540]
-            if not fs: continue
-            f = min(fs, key=lambda f: f['width']*f['height']); urllib.request.urlretrieve(f['link'], path); return path
-    except Exception as e: print('stock failed', query, e)
+    if key:
+        try:
+            rq = urllib.request.Request('https://api.pexels.com/videos/search?per_page=8&orientation=portrait&size=medium&query=' + q, headers={'Authorization': key, 'User-Agent': 'fruitsoda'})
+            for v in json.load(urllib.request.urlopen(rq, timeout=30)).get('videos', []):
+                if not 4 <= v.get('duration', 0) <= 40: continue
+                fs = [f for f in v['video_files'] if f.get('file_type') == 'video/mp4' and (f.get('height') or 0) >= 960 and (f.get('width') or 0) >= 540]
+                if not fs: continue
+                f = min(fs, key=lambda f: f['width']*f['height']); urllib.request.urlretrieve(f['link'], path); return path
+        except Exception as e: print('pexels failed', query, e)
     return None
 class Clip:
     def __init__(s, path): s.cap = cv2.VideoCapture(path); s.n = max(1, int(s.cap.get(cv2.CAP_PROP_FRAME_COUNT))); s.fps = s.cap.get(cv2.CAP_PROP_FPS) or 30; s.i = -1; s.last = None
@@ -273,7 +285,7 @@ def manifest(tag, start):
     base = f"https://github.com/{os.environ['GITHUB_REPOSITORY']}/releases/download/{tag}/"; d0 = datetime.date.fromisoformat(start); items = []; k = 0
     for p in sorted(glob.glob(os.path.join(HERE, 'specs', '*.json'))):
         sp = json.load(open(p)); day = d0 + datetime.timedelta(days=k + (k // 6))   # Mon-Sat, skip Sunday
-        items.append(dict(id=sp['id'], date=str(day), title=sp.get('yt_title', sp['hook']), description=sp.get('desc', ''), caption=sp.get('caption', ''), tags=sp.get('tags', ''), audience=sp.get('audience', 'global'), country=sp.get('country', ''),
+        items.append(dict(id=sp['id'], date=str(day), title=sp.get('yt_title', sp['hook']), description=(sp.get('desc', '') + ('\nStock footage: Pixabay' if any(l.get('m') for l in sp['lines']) else '')), caption=sp.get('caption', ''), tags=sp.get('tags', ''), audience=sp.get('audience', 'global'), country=sp.get('country', ''),
                           video=base + f"fruit_soda_{sp['id']}.mp4", thumb=base + f"fruit_soda_{sp['id']}_thumb.jpg")); k += 1
     json.dump(dict(tag=tag, items=items), open(os.path.join(OUT, 'manifest.json'), 'w'), indent=1); print(len(items), 'items')
 
