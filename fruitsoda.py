@@ -111,7 +111,7 @@ def voice(spec, path):
     global _K
     from kokoro_onnx import Kokoro
     if _K is None: ensure_models(); _K = Kokoro(os.path.join(TTS_DIR, "kokoro-v1.0.int8.onnx"), os.path.join(TTS_DIR, "voices-v1.0.bin"))
-    SR = 24000; segs = [np.zeros(int(0.6*SR))]; t = 0.6; info = []
+    SR = 24000; segs = [np.zeros(int(0.12*SR))]; t = 0.12; info = []
     lines = [l['text'] for l in spec['lines']]
     for i, line in enumerate(lines):
         s, _ = _K.create(line, voice='am_michael', speed=1.08, lang='en-us'); s = np.asarray(s, np.float32)
