@@ -167,7 +167,7 @@ def stock(query, path):
     pk = os.environ.get('PIXABAY_API_KEY')
     if pk:
         try:
-            rq = urllib.request.Request('https://pixabay.com/api/videos/?safesearch=true&per_page=10&key=' + pk + '&q=' + q, headers={'User-Agent': 'fruitsoda'})
+            rq = urllib.request.Request('https://pixabay.com/api/videos/?safesearch=true&per_page=10&key=' + pk + '&q=' + q, headers={'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36', 'Accept': 'application/json', 'Accept-Language': 'en-US,en;q=0.9'})
             for v in json.load(urllib.request.urlopen(rq, timeout=30)).get('hits', []):
                 if not 4 <= v.get('duration', 0) <= 40: continue
                 f = v['videos'].get('medium') or v['videos'].get('small')
