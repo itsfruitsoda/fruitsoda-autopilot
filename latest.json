@@ -1,65 +1,53 @@
 {
- "tag": "batch-20261124-1859",
+ "tag": "batch-20261124-1910",
  "items": [
   {
-   "id": "drainspin",
-   "date": "2026-11-30",
-   "title": "Why Does Water Spin Down The Drain? (Not What You Think) #Shorts",
-   "description": "Why does water spin down the drain? The idea that Earth's rotation sets the direction in a sink is a myth. The effect is far too weak, and leftover motion in the water decides the spin. New fizzy fact every day on Fruit Soda.\nStock footage: Pixabay",
-   "caption": "Does your sink spin the way you thought? \ud83c\udf0d Comment YES or NO if you believed the myth. Follow for a fact every day.",
-   "tags": "#waterfacts #coriolis #physics #mythbusting #didyouknow #facts #fruitsoda #shorts",
+   "id": "papertowel",
+   "date": "2026-12-03",
+   "title": "Why Does Water Climb Up A Paper Towel? #Shorts",
+   "description": "Why does water climb up a paper towel? It is capillary action: water sticks to fibres and to itself in tiny gaps. A simple physics demo you can try at home. New fizzy fact every day on Fruit Soda.",
+   "caption": "Water walking uphill with no pump 🤯 Did you know paper towels do this? Comment YES or NO. Follow for a fact every day.",
+   "tags": "#capillaryaction #physics #sciencefacts #diyscience #didyouknow #facts #fruitsoda #shorts",
    "audience": "global",
    "country": "",
-   "video": "https://github.com/itsfruitsoda/fruitsoda-autopilot/releases/download/batch-20261124-1859/fruit_soda_drainspin.mp4",
-   "thumb": "https://github.com/itsfruitsoda/fruitsoda-autopilot/releases/download/batch-20261124-1859/fruit_soda_drainspin_thumb.jpg"
-  },
-  {
-   "id": "glassflip",
-   "date": "2026-12-01",
-   "title": "Why Doesn't Water Fall Out Of An Upside Down Glass? #Shorts",
-   "description": "Why doesn't water fall out of an upside down glass with a card on top? Air pressure pushes up on the card harder than the water pushes down. A simple physics DIY. New fizzy fact every day on Fruit Soda.\nStock footage: Pixabay",
-   "caption": "Upside down glass, no spill \ud83d\ude2e Do it over a sink! Comment A or B: does air push up or down? Follow for a fact every day.",
-   "tags": "#airpressure #physics #diyscience #sciencefacts #didyouknow #facts #fruitsoda #shorts",
-   "audience": "global",
-   "country": "",
-   "video": "https://github.com/itsfruitsoda/fruitsoda-autopilot/releases/download/batch-20261124-1859/fruit_soda_glassflip.mp4",
-   "thumb": "https://github.com/itsfruitsoda/fruitsoda-autopilot/releases/download/batch-20261124-1859/fruit_soda_glassflip_thumb.jpg"
+   "video": "https://github.com/itsfruitsoda/fruitsoda-autopilot/releases/download/batch-20261124-1910/fruit_soda_papertowel.mp4",
+   "thumb": "https://github.com/itsfruitsoda/fruitsoda-autopilot/releases/download/batch-20261124-1910/fruit_soda_papertowel_thumb.jpg"
   },
   {
    "id": "ketchupdiver",
    "date": "2026-12-02",
    "title": "How To Make A Cartesian Diver With A Ketchup Packet #Shorts",
-   "description": "How to make a Cartesian diver with a ketchup packet and a plastic bottle: squeeze the bottle and the packet sinks, let go and it rises. It shows pressure and density. New fizzy fact every day on Fruit Soda.\nStock footage: Pixabay",
-   "caption": "Squeeze it and it sinks, let go and it floats \ud83e\uddea Easy DIY physics in 30 seconds. Comment DONE if you try it. Follow for a fact every day.",
+   "description": "How to make a Cartesian diver with a ketchup packet and a plastic bottle: squeeze the bottle and the packet sinks, let go and it rises. It shows pressure and density. New fizzy fact every day on Fruit Soda.",
+   "caption": "Squeeze it and it sinks, let go and it floats 🧪 Easy DIY physics in 30 seconds. Comment DONE if you try it. Follow for a fact every day.",
    "tags": "#cartesiandiver #diyscience #physics #howtomake #didyouknow #facts #fruitsoda #shorts",
    "audience": "global",
    "country": "",
-   "video": "https://github.com/itsfruitsoda/fruitsoda-autopilot/releases/download/batch-20261124-1859/fruit_soda_ketchupdiver.mp4",
-   "thumb": "https://github.com/itsfruitsoda/fruitsoda-autopilot/releases/download/batch-20261124-1859/fruit_soda_ketchupdiver_thumb.jpg"
+   "video": "https://github.com/itsfruitsoda/fruitsoda-autopilot/releases/download/batch-20261124-1910/fruit_soda_ketchupdiver.mp4",
+   "thumb": "https://github.com/itsfruitsoda/fruitsoda-autopilot/releases/download/batch-20261124-1910/fruit_soda_ketchupdiver_thumb.jpg"
   },
   {
-   "id": "papertowel",
-   "date": "2026-12-03",
-   "title": "Why Does Water Climb Up A Paper Towel? #Shorts",
-   "description": "Why does water climb up a paper towel? It is capillary action: water sticks to fibres and to itself in tiny gaps. A simple physics demo you can try at home. New fizzy fact every day on Fruit Soda.\nStock footage: Pixabay",
-   "caption": "Water walking uphill with no pump \ud83e\udd2f Did you know paper towels do this? Comment YES or NO. Follow for a fact every day.",
-   "tags": "#capillaryaction #physics #sciencefacts #diyscience #didyouknow #facts #fruitsoda #shorts",
+   "id": "glassflip",
+   "date": "2026-12-01",
+   "title": "Why Doesn't Water Fall Out Of An Upside Down Glass? #Shorts",
+   "description": "Why doesn't water fall out of an upside down glass with a card on top? Air pressure pushes up on the card harder than the water pushes down. A simple physics DIY. New fizzy fact every day on Fruit Soda.",
+   "caption": "Upside down glass, no spill 😮 Do it over a sink! Comment A or B: does air push up or down? Follow for a fact every day.",
+   "tags": "#airpressure #physics #diyscience #sciencefacts #didyouknow #facts #fruitsoda #shorts",
    "audience": "global",
    "country": "",
-   "video": "https://github.com/itsfruitsoda/fruitsoda-autopilot/releases/download/batch-20261124-1859/fruit_soda_papertowel.mp4",
-   "thumb": "https://github.com/itsfruitsoda/fruitsoda-autopilot/releases/download/batch-20261124-1859/fruit_soda_papertowel_thumb.jpg"
+   "video": "https://github.com/itsfruitsoda/fruitsoda-autopilot/releases/download/batch-20261124-1910/fruit_soda_glassflip.mp4",
+   "thumb": "https://github.com/itsfruitsoda/fruitsoda-autopilot/releases/download/batch-20261124-1910/fruit_soda_glassflip_thumb.jpg"
   },
   {
-   "id": "sciexp5",
-   "date": "2026-12-04",
-   "title": "Top 5 Science Experiments You Can Do At Home #Shorts",
-   "description": "Top 5 science experiments you can do at home with kitchen items: floating needle, milk colour burst, mini volcano, walking water and a diving ketchup packet. Each one shows a real physics or chemistry idea. New fizzy fact every day on Fruit Soda.\nStock footage: Pixabay",
-   "caption": "Five safe experiments, zero fancy gear \ud83e\uddea Which one are you trying first? Comment 1 to 5. Ask an adult to help with the kitchen bits. Follow for a fact every day.",
-   "tags": "#scienceexperiments #scienceforkids #diyscience #physics #didyouknow #facts #fruitsoda #shorts",
+   "id": "drainspin",
+   "date": "2026-11-30",
+   "title": "Why Does Water Spin Down The Drain? (Not What You Think) #Shorts",
+   "description": "Why does water spin down the drain? The idea that Earth's rotation sets the direction in a sink is a myth. The effect is far too weak, and leftover motion in the water decides the spin. New fizzy fact every day on Fruit Soda.",
+   "caption": "Does your sink spin the way you thought? 🌍 Comment YES or NO if you believed the myth. Follow for a fact every day.",
+   "tags": "#waterfacts #coriolis #physics #mythbusting #didyouknow #facts #fruitsoda #shorts",
    "audience": "global",
    "country": "",
-   "video": "https://github.com/itsfruitsoda/fruitsoda-autopilot/releases/download/batch-20261124-1859/fruit_soda_sciexp5.mp4",
-   "thumb": "https://github.com/itsfruitsoda/fruitsoda-autopilot/releases/download/batch-20261124-1859/fruit_soda_sciexp5_thumb.jpg"
+   "video": "https://github.com/itsfruitsoda/fruitsoda-autopilot/releases/download/batch-20261124-1910/fruit_soda_drainspin.mp4",
+   "thumb": "https://github.com/itsfruitsoda/fruitsoda-autopilot/releases/download/batch-20261124-1910/fruit_soda_drainspin_thumb.jpg"
   }
  ]
 }
