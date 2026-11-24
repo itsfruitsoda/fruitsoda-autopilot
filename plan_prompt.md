@@ -33,5 +33,7 @@ Formats to rotate: (a) 'Top 5 science experiments' - count down five, one visual
 - Only experiments that are safe for kids and need no fire, mains electricity, sharp tools, chemicals or heat; add 'Ask an adult' in the caption when anything could cause harm. The explanation must be scientifically accurate; if unsure of the real reason, choose another topic.
 - Put the main search phrase first in yt_title ('Water Climbs Up Paper: Why?', 'Top 5 Science Experiments At Home', 'How To Build A Floating Table With Straws').
 
+- Water is only one example. Spread the science/DIY series across many different elements and concepts, never two in a row on the same one: magnets and magnetism, light and shadows (prisms, mirrors, lenses), sound and vibration, static electricity with balloons, gravity and balance (centre of mass tricks), levers and simple machines, friction, heat and insulation (safe, no flames), chemistry reactions with household items (safe, ventilated), structures and tension (paper bridges, straw towers, strings holding shapes up), air and flight (paper planes, parachutes), and everyday optical illusions.
+
 Stock footage (optional but encouraged):
 - Add "m" to a line: a 2-3 word concrete, filmable search term for a background clip (e.g. "basketball court", "octopus underwater", "rocket launch", "city traffic night"). Use real-world physical subjects only; skip abstract ideas, on-screen numbers, close-ups of faces, and anything that would need a logo. Add "m" to at least 3 lines; omit it on pure-number or abstract lines.
