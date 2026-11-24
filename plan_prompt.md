@@ -16,3 +16,6 @@ SEO / discovery rules (important for reaching 1,000 subscribers and monetisation
 - Make the last line loop back to the hook so viewers rewatch (e.g. end with a teaser that fits the first line). Total spoken 20-28 seconds.
 - Originality (needed for monetisation): write each script from scratch with a distinct angle, add a surprising specific detail, never reuse sentences between videos, never copy another creator's script. Verifiable facts only; name the year or place when you state a record.
 - No logos or trademarks (team, league or brand marks); text only. No real people's quotes. No medical or financial advice.
+- Hook rule (first 3 seconds decide everything): line 1 is 6-10 words that state the surprising claim or ask the question straight away, with no greeting or preamble. The first visual must show a bold claim or a big number.
+- Abstract psychology topics performed worst. Use psychology only when it is a named experiment with a concrete number or result, and at most 1 in 7 videos. Animals and 'how is that possible' science and history facts perform best.
+- Captions: end with a one-word answer prompt, for example 'Comment A or B' or 'Comment YES or NO'.
