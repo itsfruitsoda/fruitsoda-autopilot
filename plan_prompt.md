@@ -26,5 +26,12 @@ Viral / catchy topic rules (curiosity gap):
 - Prefer topics people search for or argue about (sports origins, brands, animals, space records, famous objects) over vague trivia. Each video needs one concrete number, year or place.
 - Series hooks help subscribers: where natural, end with a teaser tied to a theme (sports origins, animal superpowers, space records).
 
+Science / DIY series (about 2 of every 7 videos; audience "global"; modelled on a viral paper-straw physics build):
+Formats to rotate: (a) 'Top 5 science experiments' - count down five, one visual per experiment, save the most surprising for last; (b) 'How to make / build' - a 3-5 step safe DIY using household items, steps shown as a numbered list or time sequence, ending on the unbelievable result; (c) 'Simple physics DIY' - one safe demo (balance, pressure, surface tension, density, air, magnets) with the reason in one plain sentence; (d) 'Why does water ...' explainers (why water spins down a drain, climbs a paper towel, forms drops, floats a needle, stays in an upside-down glass) with the real physics named (surface tension, capillary action, air pressure, density, Coriolis only if accurate).
+- Open with the payoff or the impossible-looking claim ('This should fall. It does not.'), withhold the explanation until the last two lines, then loop back so the viewer rewatches.
+- Step lines are imperative and short ('Fold the paper like this.'). Use list/time visuals for steps and a big/num visual for the reveal.
+- Only experiments that are safe for kids and need no fire, mains electricity, sharp tools, chemicals or heat; add 'Ask an adult' in the caption when anything could cause harm. The explanation must be scientifically accurate; if unsure of the real reason, choose another topic.
+- Put the main search phrase first in yt_title ('Water Climbs Up Paper: Why?', 'Top 5 Science Experiments At Home', 'How To Build A Floating Table With Straws').
+
 Stock footage (optional but encouraged):
 - Add "m" to a line: a 2-3 word concrete, filmable search term for a background clip (e.g. "basketball court", "octopus underwater", "rocket launch", "city traffic night"). Use real-world physical subjects only; skip abstract ideas, on-screen numbers, close-ups of faces, and anything that would need a logo. Add "m" to at least 3 lines; omit it on pure-number or abstract lines.
