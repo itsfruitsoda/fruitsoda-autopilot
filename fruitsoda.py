@@ -243,6 +243,21 @@ def build(spec, tm):
         return (out*VIG).astype(np.uint8)
     return frame, total
 
+CC0_TRACKS = ['Sports Spirit', 'Party Time', 'Happy Life', 'The Champion', 'My Inventions', 'Science Fiction', 'Starter', 'Newness']
+def audio_ok(p):
+    r = subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p], capture_output=True, text=True)
+    try: return r.returncode == 0 and float(r.stdout.strip()) > 10
+    except Exception: return False
+def fetch_music():
+    """Royalty-free (CC0) tracks by Efface Studios; downloaded when the music/ folder has no usable file."""
+    import urllib.parse
+    md = os.path.join(HERE, 'music'); os.makedirs(md, exist_ok=True)
+    for nm in CC0_TRACKS:
+        dst = os.path.join(md, nm.lower().replace(' ', '_') + '.mp3')
+        if os.path.exists(dst) and audio_ok(dst): continue
+        try: urllib.request.urlretrieve('https://raw.githubusercontent.com/effacestudios/Royalty-Free-Music-Pack/master/' + urllib.parse.quote(nm) + '.mp3', dst)
+        except Exception as e: print('music fetch failed', nm, e)
+    return [t for t in sorted(glob.glob(os.path.join(md, '*.mp3'))) if audio_ok(t)]
 def render(path):
     spec = json.load(open(path)); spec['lines'] = [l if isinstance(l, dict) else {'text': l} for l in spec['lines']]
     if spec['lines'][-1]['text'] != CTA: spec['lines'].append({'text': CTA})
@@ -250,9 +265,12 @@ def render(path):
     tm = voice(spec, f'{tmp}/vo.wav'); h = int(hashlib.md5(vid.encode()).hexdigest(), 16)
     for k, l in enumerate(spec['lines']):
         if l.get('m'): l['_m'] = stock(l['m'], f'{tmp}/m{k}.mp4')
-    tracks = sorted(glob.glob(os.path.join(HERE, 'music', '*.mp3')) + glob.glob(os.path.join(HERE, 'music', '*.m4a')) + glob.glob(os.path.join(HERE, 'music', '*.wav')) + glob.glob(os.path.join(HERE, 'music', '*.ogg')))
-    if tracks: subprocess.run(['ffmpeg', '-y', '-v', 'error', '-stream_loop', '-1', '-i', tracks[h % len(tracks)], '-t', '40', '-ar', '44100', '-ac', '1', f'{tmp}/music.wav'], check=True)
-    else: music(h % 100, 92+h % 26, 40, [196.0, 220.0, 233.08, 246.94, 261.63, 277.18, 293.66][h % 7], f'{tmp}/music.wav')
+    tracks = [t for t in sorted(glob.glob(os.path.join(HERE, 'music', '*.mp3')) + glob.glob(os.path.join(HERE, 'music', '*.m4a')) + glob.glob(os.path.join(HERE, 'music', '*.wav')) + glob.glob(os.path.join(HERE, 'music', '*.ogg'))) if audio_ok(t)]
+    if not tracks: tracks = fetch_music()
+    done = False
+    if tracks:
+        done = subprocess.run(['ffmpeg', '-y', '-v', 'error', '-stream_loop', '-1', '-i', tracks[h % len(tracks)], '-t', '40', '-ar', '44100', '-ac', '1', f'{tmp}/music.wav']).returncode == 0
+    if not done: music(h % 100, 92+h % 26, 40, [196.0, 220.0, 233.08, 246.94, 261.63, 277.18, 293.66][h % 7], f'{tmp}/music.wav')
     frame, total = build(spec, tm); n = int(total*FPS); mp4 = os.path.join(OUT, f'fruit_soda_{vid}.mp4')
     cmd = ['ffmpeg','-y','-v','error','-f','rawvideo','-pix_fmt','rgb24','-s',f'{W}x{H}','-r',str(FPS),'-i','-','-i',f'{tmp}/vo.wav','-i',f'{tmp}/music.wav',
            '-filter_complex', f'[1:a]aresample=44100,apad[v];[2:a]aresample=44100,volume=0.20[m];[v][m]amix=inputs=2:duration=first:normalize=0,atrim=0:{total},loudnorm=I=-14:TP=-1.5[a]',
