@@ -243,7 +243,7 @@ def build(spec, tm):
         return (out*VIG).astype(np.uint8)
     return frame, total
 
-CC0_TRACKS = ['Sports Spirit', 'Party Time', 'Happy Life', 'The Champion', 'My Inventions', 'Science Fiction', 'Starter', 'Newness']
+CC0_TRACKS = ['Sports Spirit', 'Party Time', 'The Champion', 'Science Fiction']
 def audio_ok(p):
     r = subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p], capture_output=True, text=True)
     try: return r.returncode == 0 and float(r.stdout.strip()) > 10
