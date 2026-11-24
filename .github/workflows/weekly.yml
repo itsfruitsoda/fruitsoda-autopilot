@@ -30,7 +30,7 @@ jobs:
           N=$(ls specs/*.json 2>/dev/null | wc -l); WANT=${{ github.event.inputs.count || '6' }}
           if [ "$N" -lt "$WANT" ]; then python fruitsoda.py plan $((WANT-N)); fi
       - name: Render
-        env: { FS_FONTS: '${{ github.workspace }}/fonts/' }
+        env: { FS_FONTS: '${{ github.workspace }}/fonts/', PIXABAY_API_KEY: '${{ secrets.PIXABAY_API_KEY }}' }
         run: python fruitsoda.py render
       - name: Publish release + manifest
         env: { GH_TOKEN: '${{ github.token }}' }
