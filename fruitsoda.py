@@ -159,6 +159,32 @@ def caption(c, words, times, t, y0):
             c.text(w, (x, y), 70, YEL if (act and idx == max(act)) else WHITE, anchor='lm', stroke=9, sc=DARK)
             x += fnt.getlength(w+' '); idx += 1
 
+def stock(query, path):
+    """Download one portrait stock clip (Pexels, free licence) for a search term; None if no key or no result."""
+    key = os.environ.get('PEXELS_API_KEY')
+    if not key or not query: return None
+    try:
+        import urllib.parse
+        rq = urllib.request.Request('https://api.pexels.com/videos/search?per_page=8&orientation=portrait&size=medium&query=' + urllib.parse.quote(query), headers={'Authorization': key, 'User-Agent': 'fruitsoda'})
+        for v in json.load(urllib.request.urlopen(rq, timeout=30)).get('videos', []):
+            if not 4 <= v.get('duration', 0) <= 40: continue
+            fs = [f for f in v['video_files'] if f.get('file_type') == 'video/mp4' and (f.get('height') or 0) >= 960 and (f.get('width') or 0) >= 540]
+            if not fs: continue
+            f = min(fs, key=lambda f: f['width']*f['height']); urllib.request.urlretrieve(f['link'], path); return path
+    except Exception as e: print('stock failed', query, e)
+    return None
+class Clip:
+    def __init__(s, path): s.cap = cv2.VideoCapture(path); s.n = max(1, int(s.cap.get(cv2.CAP_PROP_FRAME_COUNT))); s.fps = s.cap.get(cv2.CAP_PROP_FPS) or 30; s.i = -1; s.last = None
+    def at(s, t):
+        k = int(t*s.fps) % s.n
+        if k != s.i+1: s.cap.set(cv2.CAP_PROP_POS_FRAMES, k)
+        ok, fr = s.cap.read()
+        if not ok: s.cap.set(cv2.CAP_PROP_POS_FRAMES, 0); ok, fr = s.cap.read(); k = 0
+        s.i = k
+        if ok:
+            h, w = fr.shape[:2]; sc = max(W/w, H/h); fr = cv2.resize(fr, (int(w*sc)+1, int(h*sc)+1)); y0 = (fr.shape[0]-H)//2; x0 = (fr.shape[1]-W)//2
+            s.last = cv2.cvtColor(fr[y0:y0+H, x0:x0+W], cv2.COLOR_BGR2RGB)
+        return s.last
 _yy,_xx=np.mgrid[0:H,0:W]; VIG=(1-0.30*np.clip((((_xx-W/2)/(W/2))**2+((_yy-H/2)/(H/2))**2)-0.35,0,1))[...,None].astype(np.float32)
 def build(spec, tm):
     lines = tm['lines']; total = tm['total']+0.4; n = len(lines)
@@ -168,6 +194,7 @@ def build(spec, tm):
     for L in lines:
         ws = L['text'].split(); ln = np.array([len(w)+2 for w in ws], float); cs = np.concatenate([[0], np.cumsum(ln)])/ln.sum()
         wt.append((ws, [L['start']+(L['end']-L['start'])*x for x in cs[:-1]]))
+    clips = [Clip(l['_m']) if l.get('_m') else None for l in spec['lines']]
     rs = np.random.RandomState(7); bub = [(rs.uniform(0,W), rs.uniform(0,2400), rs.uniform(60,160), rs.uniform(8,30)) for _ in range(34)]
     def frame(t):
         c = Cv(bg); o = c.img.copy()
@@ -182,6 +209,9 @@ def build(spec, tm):
         for k, L in enumerate(lines):
             if t >= L['start']-0.05: i = k
         L = lines[i]; nxt = lines[i+1]['start'] if i+1 < n else total; p = clamp((t-L['start'])/max(.1, nxt-L['start'])); last = (i == n-1)
+        if clips[i] is not None:
+            m = clips[i].at(t-L['start'])
+            if m is not None: c.img = cv2.addWeighted(m, 0.55, c.img, 0.45, 0); c.img = (c.img*0.62).astype(np.uint8)
         paste_badge(c.img, 110, 140, 62); c.text('FRUIT SODA', (190,140), 44, WHITE, anchor='lm')
         c.rrect(700, 105, 1010, 175, 35, PINK); c.text(spec['cat'][:14], (855,140), 34, WHITE)
         if not last:
@@ -206,7 +236,11 @@ def render(path):
     if spec['lines'][-1]['text'] != CTA: spec['lines'].append({'text': CTA})
     vid = spec['id']; tmp = os.path.join(OUT, '_' + vid); os.makedirs(tmp, exist_ok=True)
     tm = voice(spec, f'{tmp}/vo.wav'); h = int(hashlib.md5(vid.encode()).hexdigest(), 16)
-    music(h % 100, 92+h % 26, 40, [196.0, 220.0, 233.08, 246.94, 261.63, 277.18, 293.66][h % 7], f'{tmp}/music.wav')
+    for k, l in enumerate(spec['lines']):
+        if l.get('m'): l['_m'] = stock(l['m'], f'{tmp}/m{k}.mp4')
+    tracks = sorted(glob.glob(os.path.join(HERE, 'music', '*.mp3')) + glob.glob(os.path.join(HERE, 'music', '*.m4a')) + glob.glob(os.path.join(HERE, 'music', '*.wav')) + glob.glob(os.path.join(HERE, 'music', '*.ogg')))
+    if tracks: subprocess.run(['ffmpeg', '-y', '-v', 'error', '-stream_loop', '-1', '-i', tracks[h % len(tracks)], '-t', '40', '-ar', '44100', '-ac', '1', f'{tmp}/music.wav'], check=True)
+    else: music(h % 100, 92+h % 26, 40, [196.0, 220.0, 233.08, 246.94, 261.63, 277.18, 293.66][h % 7], f'{tmp}/music.wav')
     frame, total = build(spec, tm); n = int(total*FPS); mp4 = os.path.join(OUT, f'fruit_soda_{vid}.mp4')
     cmd = ['ffmpeg','-y','-v','error','-f','rawvideo','-pix_fmt','rgb24','-s',f'{W}x{H}','-r',str(FPS),'-i','-','-i',f'{tmp}/vo.wav','-i',f'{tmp}/music.wav',
            '-filter_complex', f'[1:a]aresample=44100,apad[v];[2:a]aresample=44100,volume=0.20[m];[v][m]amix=inputs=2:duration=first:normalize=0,atrim=0:{total},loudnorm=I=-14:TP=-1.5[a]',
