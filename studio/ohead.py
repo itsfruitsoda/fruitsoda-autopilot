@@ -3,6 +3,14 @@ import numpy as np, cv2, soundfile as sf
 sys.path.insert(0, '/tmp/par2'); from anim import *
 os.chdir('/home/claude/repo')
 from kokoro_onnx import Kokoro
+if not os.path.exists('logo.png') and os.path.exists('logo_b64.txt'):
+    import base64; open('logo.png', 'wb').write(base64.b64decode(open('logo_b64.txt').read()))
+import anim as _anim
+_orig_font = _anim.font
+def _safe_font(name, size, var=None):
+    try: return _orig_font(name, size, var)
+    except Exception: return _orig_font('Poppins-Bold.ttf', size)
+_anim.font = _safe_font; font = _safe_font
 
 SPEC = json.load(open(sys.argv[1])); OUT = sys.argv[2]
 VOICE = SPEC.get('voice', 'am_onyx'); SPEED = SPEC.get('speed', 0.92)
