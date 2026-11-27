@@ -1,0 +1,54 @@
+name: Studio videos
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 20 * * *'   # daily 01:30 IST
+permissions:
+  contents: write
+jobs:
+  studio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: sudo apt-get update -y && sudo apt-get install -y ffmpeg
+      - run: pip install -r requirements.txt
+      - name: Fonts
+        run: |
+          mkdir -p fonts
+          curl -sL https://github.com/google/fonts/raw/main/ofl/poppins/Poppins-Bold.ttf -o fonts/Poppins-Bold.ttf
+          curl -sL https://github.com/google/fonts/raw/main/ofl/poppins/Poppins-Medium.ttf -o fonts/Poppins-Medium.ttf
+          curl -sL 'https://github.com/google/fonts/raw/main/ofl/lora/Lora%5Bwght%5D.ttf' -o fonts/Lora-Variable.ttf
+      - name: Render studio specs
+        env: { FS_FONTS: '${{ github.workspace }}/fonts/', STUDIO_TMP: '/tmp/studio' }
+        run: |
+          shopt -s nullglob
+          mkdir -p out
+          FILES=(studio/specs/*.json)
+          if [ ${#FILES[@]} -eq 0 ]; then echo 'No studio specs'; exit 0; fi
+          for f in "${FILES[@]}"; do
+            id=$(basename "$f" .json)
+            python studio/build.py "$f" "out/fruit_soda_$id.mp4"
+          done
+      - name: Publish release and manifest
+        env: { GH_TOKEN: '${{ github.token }}' }
+        run: |
+          shopt -s nullglob
+          FILES=(studio/specs/*.json)
+          if [ ${#FILES[@]} -eq 0 ]; then exit 0; fi
+          TAG=studio-$(date -u +%Y%m%d-%H%M)
+          export TAG
+          python - <<'PY'
+          import json, glob, os
+          tag = os.environ['TAG']; repo = os.environ['GITHUB_REPOSITORY']; items = []
+          for f in sorted(glob.glob('studio/specs/*.json')):
+              s = json.load(open(f)); i = os.path.basename(f)[:-5]
+              items.append(dict(id=i, audience=s.get('audience', 'animals'), title=s.get('title', i), description=s.get('description', ''), caption=s.get('caption', ''), tags=s.get('tags', ''), video=f'https://github.com/{repo}/releases/download/{tag}/fruit_soda_{i}.mp4'))
+          json.dump(dict(tag=tag, items=items), open('studio_latest.json', 'w'), indent=1)
+          PY
+          gh release create $TAG out/*.mp4 --title "$TAG" --notes "Fruit Soda studio videos"
+          mkdir -p studio/done && git mv studio/specs/*.json studio/done/
+          git config user.name fruitsoda-bot && git config user.email bot@users.noreply.github.com
+          git add -A studio studio_latest.json && git commit -m "Studio batch $TAG" && git push
