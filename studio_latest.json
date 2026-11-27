@@ -1,0 +1,23 @@
+{
+ "tag": "studio-20261127-2051",
+ "items": [
+  {
+   "id": "axo",
+   "audience": "animals",
+   "title": "This Smiling Animal Can Regrow Its Own Legs #Shorts",
+   "description": "The axolotl can regrow lost limbs with bones, muscles and nerves, and repair parts of its heart, spinal cord and brain. Scientists study it to learn how healing might work. New fizzy fact every day on Fruit Soda.",
+   "caption": "This smiling animal can regrow its own legs. Would you want this superpower? Tell us in the comments.",
+   "tags": "#axolotl #animalfacts #regeneration #nature #science #didyouknow #fruitsoda #shorts",
+   "video": "https://github.com/itsfruitsoda/fruitsoda-autopilot/releases/download/studio-20261127-2051/fruit_soda_axo.mp4"
+  },
+  {
+   "id": "otter",
+   "audience": "animals",
+   "title": "Why Sea Otters Hold Hands While They Sleep #Shorts",
+   "description": "Sea otters link paws while they sleep so ocean currents do not carry them away from their family. They also wrap themselves in kelp and keep a favorite rock in a skin pocket. New fizzy fact every day on Fruit Soda.",
+   "caption": "Sea otters hold hands while they sleep. Who would you hold hands with? Tell us in the comments.",
+   "tags": "#seaotter #otters #animalfacts #cute #nature #ocean #didyouknow #fruitsoda #shorts",
+   "video": "https://github.com/itsfruitsoda/fruitsoda-autopilot/releases/download/studio-20261127-2051/fruit_soda_otter.mp4"
+  }
+ ]
+}
