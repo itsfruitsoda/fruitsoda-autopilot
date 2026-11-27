@@ -6,6 +6,10 @@ from kokoro_onnx import Kokoro
 
 SPEC = json.load(open(sys.argv[1])); OUT = sys.argv[2]
 VOICE = SPEC.get('voice', 'am_onyx'); SPEED = SPEC.get('speed', 0.92)
+import urllib.request
+os.makedirs('tts', exist_ok=True)
+for _f in ('kokoro-v1.0.int8.onnx', 'voices-v1.0.bin'):
+    if not os.path.exists('tts/' + _f): urllib.request.urlretrieve('https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/' + _f, 'tts/' + _f)
 K = Kokoro('tts/kokoro-v1.0.int8.onnx', 'tts/voices-v1.0.bin')
 SR = 24000
 lines = SPEC['lines'] + ['Follow Fruit Soda for a fun fact every day.']
