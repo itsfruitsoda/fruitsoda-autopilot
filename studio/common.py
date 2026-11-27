@@ -14,6 +14,17 @@ def frame(t):
 
 n = int(total * 30)
 mus = SPEC.get('music', 'happy_life.mp3')
+def _ok(p):
+    return os.path.exists(p) and subprocess.run(['ffmpeg', '-v', 'error', '-t', '2', '-i', p, '-f', 'null', '-'], capture_output=True).returncode == 0
+if not _ok('music/' + mus):
+    import urllib.request, urllib.parse
+    os.makedirs('music', exist_ok=True)
+    nm = os.path.splitext(mus)[0].replace('_', ' ').title()
+    try: urllib.request.urlretrieve('https://raw.githubusercontent.com/effacestudios/Royalty-Free-Music-Pack/master/' + urllib.parse.quote(nm) + '.mp3', 'music/' + mus)
+    except Exception as e: print('music fetch failed', e)
+    if not _ok('music/' + mus):
+        _m = [t for t in sorted(glob.glob('music/*.mp3')) if _ok(t)]
+        mus = os.path.basename(_m[0]) if _m else mus
 subprocess.run(['ffmpeg', '-y', '-v', 'error', '-stream_loop', '-1', '-i', 'music/' + mus, '-t', str(total + 1), '-ar', '44100', '-ac', '1', '/tmp/par2/music.wav'], check=True)
 cmd = ['ffmpeg', '-y', '-v', 'error', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}', '-r', '30', '-i', '-', '-i', '/tmp/par2/vo.wav', '-i', '/tmp/par2/music.wav',
        '-filter_complex', f'[1:a]aresample=44100,apad[v];[2:a]aresample=44100,volume=0.12[m];[v][m]amix=inputs=2:duration=first:normalize=0,atrim=0:{total},loudnorm=I=-14:TP=-1.5[a]',
